@@ -18,6 +18,10 @@ RUN npm install --omit=dev
 # 複製客戶端文件
 COPY client/ ./client/
 
+# 檢查複製結果
+RUN ls -la /app/
+RUN ls -la /app/client/
+
 # 安裝前端依賴並構建
 WORKDIR /app/client
 RUN ls -la
