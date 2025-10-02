@@ -174,7 +174,7 @@ router.get('/me', authenticateToken, async (req, res) => {
 
     res.json({
       success: true,
-      user: result.rows[0]
+      data: result.rows[0]
     });
   } catch (error) {
     console.error('獲取用戶信息失敗:', error);
