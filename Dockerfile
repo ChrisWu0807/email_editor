@@ -4,25 +4,14 @@ FROM node:18-alpine
 # 設置工作目錄
 WORKDIR /app
 
-# 複製根目錄的 package.json
-COPY package*.json ./
+# 複製所有文件
+COPY . ./
 
 # 安裝後端依賴
 RUN npm install --omit=dev
 
-# 複製後端代碼
-COPY server.js ./
-COPY config/ ./config/
-COPY routes/ ./routes/
-COPY services/ ./services/
-COPY database/ ./database/
-
-# 複製前端代碼並構建
-COPY client/package*.json ./client/
-RUN cd client && npm install
-
-COPY client/ ./client/
-RUN cd client && npm run build
+# 安裝前端依賴並構建
+RUN cd client && npm install && npm run build
 
 # 暴露端口
 EXPOSE 5000
