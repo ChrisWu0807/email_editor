@@ -16,6 +16,9 @@ const webhookRoutes = require('./routes/webhooks');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// 信任代理（用於雲端環境）
+app.set('trust proxy', 1);
+
 // 安全中間件
 app.use(helmet());
 
