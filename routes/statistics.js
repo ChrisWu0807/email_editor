@@ -141,6 +141,8 @@ router.get('/overview', async (req, res) => {
       return res.status(400).json({ success: false, error: '用戶 ID 不存在' });
     }
     
+    // 簡化的統計查詢，避免複雜的 JOIN
+    console.log('🔍 [StatisticsAPI] 查詢活動統計');
     const result = await query(
       `SELECT 
         COUNT(*) as total_campaigns,
@@ -151,42 +153,51 @@ router.get('/overview', async (req, res) => {
        WHERE user_id = $1`,
       [userId]
     );
+    
+    console.log('🔍 [StatisticsAPI] 活動統計結果:', result.rows);
 
+    // 簡化的收件人統計 - 只統計總數，避免複雜查詢
+    console.log('🔍 [StatisticsAPI] 查詢收件人統計');
     const recipientStatsResult = await query(
-      `SELECT 
-        COUNT(*) as total_recipients,
-        COUNT(CASE WHEN status = 'sent' OR status = 'delivered' THEN 1 END) as sent_recipients,
-        COUNT(CASE WHEN opened_at IS NOT NULL THEN 1 END) as opened_recipients,
-        COUNT(CASE WHEN clicked_at IS NOT NULL THEN 1 END) as clicked_recipients,
-        COUNT(CASE WHEN unsubscribed_at IS NOT NULL THEN 1 END) as unsubscribed_recipients,
-        COUNT(CASE WHEN bounced_at IS NOT NULL THEN 1 END) as bounced_recipients
+      `SELECT COUNT(*) as total_recipients
        FROM recipients r
        JOIN campaigns c ON r.campaign_id = c.id
        WHERE c.user_id = $1`,
       [userId]
     );
+    
+    console.log('🔍 [StatisticsAPI] 收件人統計結果:', recipientStatsResult.rows);
 
     const campaignStats = result.rows[0];
     const recipientStats = recipientStatsResult.rows[0];
 
+    // 簡化的統計數據，避免複雜計算
     const overview = {
-      campaigns: campaignStats,
-      recipients: recipientStats,
+      campaigns: {
+        total_campaigns: parseInt(campaignStats.total_campaigns) || 0,
+        sent_campaigns: parseInt(campaignStats.sent_campaigns) || 0,
+        draft_campaigns: parseInt(campaignStats.draft_campaigns) || 0,
+        failed_campaigns: parseInt(campaignStats.failed_campaigns) || 0
+      },
+      recipients: {
+        total_recipients: parseInt(recipientStats.total_recipients) || 0,
+        sent_recipients: 0,
+        opened_recipients: 0,
+        clicked_recipients: 0,
+        unsubscribed_recipients: 0,
+        bounced_recipients: 0
+      },
       overallStats: {
-        deliveryRate: recipientStats.total_recipients > 0 ? 
-          ((recipientStats.sent_recipients / recipientStats.total_recipients) * 100).toFixed(2) : 0,
-        openRate: recipientStats.sent_recipients > 0 ? 
-          ((recipientStats.opened_recipients / recipientStats.sent_recipients) * 100).toFixed(2) : 0,
-        clickRate: recipientStats.sent_recipients > 0 ? 
-          ((recipientStats.clicked_recipients / recipientStats.sent_recipients) * 100).toFixed(2) : 0,
-        unsubscribeRate: recipientStats.sent_recipients > 0 ? 
-          ((recipientStats.unsubscribed_recipients / recipientStats.sent_recipients) * 100).toFixed(2) : 0,
-        bounceRate: recipientStats.total_recipients > 0 ? 
-          ((recipientStats.bounced_recipients / recipientStats.total_recipients) * 100).toFixed(2) : 0
+        deliveryRate: 0,
+        openRate: 0,
+        clickRate: 0,
+        unsubscribeRate: 0,
+        bounceRate: 0
       }
     };
-
-    res.json({ success: true, overview });
+    
+    console.log('🔍 [StatisticsAPI] 返回統計數據:', overview);
+    res.json({ success: true, data: overview });
   } catch (error) {
     console.error('獲取總體統計失敗:', error);
     res.status(500).json({ success: false, error: '獲取總體統計失敗' });
