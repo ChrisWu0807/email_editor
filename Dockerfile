@@ -11,7 +11,10 @@ COPY . ./
 RUN npm install --omit=dev
 
 # 安裝前端依賴並構建
-RUN cd client && npm install && npm run build
+WORKDIR /app/client
+RUN npm install
+RUN npm run build
+WORKDIR /app
 
 # 暴露端口
 EXPOSE 5000
