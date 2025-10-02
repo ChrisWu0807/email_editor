@@ -13,7 +13,7 @@ const dbConfig = {
   // Zeabur部署時會自動設置DATABASE_URL
   ...(process.env.DATABASE_URL && {
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false, require: false } : false
+    ssl: false  // 完全禁用 SSL 以支援 Zeabur 數據庫
   }),
   
   // 連接池配置
