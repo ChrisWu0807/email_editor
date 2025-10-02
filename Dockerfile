@@ -1,4 +1,4 @@
-# 簡化的 Dockerfile for Zeabur 部署
+# 簡化的 Dockerfile for Zeabur 部署 - 僅後端
 FROM node:18-alpine
 
 # 設置工作目錄
@@ -16,9 +16,6 @@ COPY config/ ./config/
 COPY routes/ ./routes/
 COPY services/ ./services/
 COPY database/ ./database/
-
-# 複製前端構建文件（如果存在）
-COPY client/build/ ./client/build/
 
 # 暴露端口
 EXPOSE 5000

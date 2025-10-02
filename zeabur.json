@@ -7,8 +7,7 @@
         "type": "git",
         "url": "https://github.com/ChrisWu0807/email_editor.git",
         "branch": "main",
-        "buildCommand": "npm install --omit=dev",
-        "startCommand": "node server.js"
+        "dockerfile": "Dockerfile"
       },
       "env": {
         "NODE_ENV": "production",
