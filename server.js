@@ -67,8 +67,8 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 根路由
-app.get('/', (req, res) => {
+// API 信息路由（僅在開發環境或特定路徑）
+app.get('/api', (req, res) => {
   res.json({ 
     message: 'Email Editor API Server',
     version: '1.0.0',
