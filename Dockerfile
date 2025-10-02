@@ -4,11 +4,19 @@ FROM node:18-alpine
 # 設置工作目錄
 WORKDIR /app
 
-# 複製所有文件
-COPY . ./
+# 複製後端文件
+COPY package*.json ./
+COPY server.js ./
+COPY config/ ./config/
+COPY routes/ ./routes/
+COPY services/ ./services/
+COPY database/ ./database/
 
 # 安裝後端依賴
 RUN npm install --omit=dev
+
+# 複製客戶端文件
+COPY client/ ./client/
 
 # 安裝前端依賴並構建
 WORKDIR /app/client
