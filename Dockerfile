@@ -21,6 +21,8 @@ COPY client/ ./client/
 # 安裝前端依賴並構建
 WORKDIR /app/client
 RUN npm install
+# 設置生產環境變數並構建
+ENV REACT_APP_API_URL=/api
 RUN npm run build
 WORKDIR /app
 
