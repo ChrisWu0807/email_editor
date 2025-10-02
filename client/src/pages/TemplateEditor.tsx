@@ -187,11 +187,15 @@ const TemplateEditor: React.FC = () => {
             <div>
               <label className="form-label">HTML 內容 *</label>
               <Editor
-                // 使用本地版本，不需要 API Key
+                apiKey="no-api-key"
                 value={formData.htmlContent}
                 init={{
                   height: 500,
                   menubar: false,
+                  // 離線模式配置
+                  license_key: 'gpl',
+                  promotion: false,
+                  branding: false,
                   plugins: [
                     'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                     'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',

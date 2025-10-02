@@ -19,16 +19,17 @@ const PORT = process.env.PORT || 8080;
 // 信任代理（用於雲端環境）
 app.set('trust proxy', 1);
 
-// 安全中間件 - 允許 TinyMCE CDN
+// 安全中間件 - 允許 TinyMCE CDN 和相關資源
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tiny.cloud"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tiny.cloud"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.tiny.cloud"],
+      imgSrc: ["'self'", "data:", "https:", "https://cdn.tiny.cloud"],
+      connectSrc: ["'self'", "https://cdn.tiny.cloud"],
+      frameSrc: ["'self'", "https://cdn.tiny.cloud"],
     },
   },
 }));
