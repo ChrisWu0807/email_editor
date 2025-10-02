@@ -1,41 +1,24 @@
-# 多階段構建 Dockerfile for Zeabur 部署
+# 簡化的 Dockerfile for Zeabur 部署
+FROM node:18-alpine
 
-# 第一階段：構建前端
-FROM node:18-alpine AS frontend-build
-
-WORKDIR /app/client
-COPY client/package*.json ./
-RUN npm install
-
-COPY client/ ./
-RUN npm run build
-
-# 第二階段：構建後端
-FROM node:18-alpine AS backend-build
-
+# 設置工作目錄
 WORKDIR /app
+
+# 複製 package.json 和 package-lock.json
 COPY package*.json ./
+
+# 安裝後端依賴
 RUN npm install --omit=dev
 
-COPY . .
-COPY --from=frontend-build /app/client/build ./client/build
+# 複製後端代碼
+COPY server.js ./
+COPY config/ ./config/
+COPY routes/ ./routes/
+COPY services/ ./services/
+COPY database/ ./database/
 
-# 第三階段：生產環境
-FROM node:18-alpine AS production
-
-WORKDIR /app
-
-# 安裝 serve 來提供靜態文件
-RUN npm install -g serve
-
-# 複製構建好的文件
-COPY --from=backend-build /app/node_modules ./node_modules
-COPY --from=backend-build /app/server.js ./
-COPY --from=backend-build /app/config ./config
-COPY --from=backend-build /app/routes ./routes
-COPY --from=backend-build /app/services ./services
-COPY --from=backend-build /app/database ./database
-COPY --from=backend-build /app/client/build ./client/build
+# 複製前端構建文件（如果存在）
+COPY client/build/ ./client/build/
 
 # 暴露端口
 EXPOSE 5000

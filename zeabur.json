@@ -21,8 +21,7 @@
         "type": "git",
         "url": "https://github.com/ChrisWu0807/email_editor.git",
         "branch": "main",
-        "buildCommand": "cd client && npm install && npm run build",
-        "startCommand": "cd client && npx serve -s build -l 3000"
+        "dockerfile": "client/Dockerfile"
       },
       "env": {
         "REACT_APP_API_URL": "https://email-editor-api.zeabur.app/api"
