@@ -187,7 +187,7 @@ const TemplateEditor: React.FC = () => {
             <div>
               <label className="form-label">HTML 內容 *</label>
               <Editor
-                apiKey="your-tinymce-api-key" // 需要替換為實際的 TinyMCE API Key
+                // 使用本地版本，不需要 API Key
                 value={formData.htmlContent}
                 init={{
                   height: 500,
