@@ -32,24 +32,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
+      console.log('🔍 [AuthContext] 開始認證初始化');
       const token = localStorage.getItem('token');
       const userData = localStorage.getItem('user');
+      
+      console.log('🔍 [AuthContext] Token 存在:', !!token);
+      console.log('🔍 [AuthContext] UserData 存在:', !!userData);
 
       if (token && userData) {
         try {
+          console.log('🔍 [AuthContext] 調用 getMe API');
           const response = await authAPI.getMe();
+          console.log('🔍 [AuthContext] getMe 響應:', response);
+          
           if (response.success && response.data) {
+            console.log('🔍 [AuthContext] 認證成功，設置用戶:', response.data);
             setUser(response.data);
           } else {
+            console.log('🔍 [AuthContext] 認證失敗，清除本地存儲');
             localStorage.removeItem('token');
             localStorage.removeItem('user');
           }
         } catch (error) {
-          console.error('認證初始化失敗:', error);
+          console.error('🔍 [AuthContext] 認證初始化失敗:', error);
           localStorage.removeItem('token');
           localStorage.removeItem('user');
         }
+      } else {
+        console.log('🔍 [AuthContext] 沒有 token 或 userData，跳過認證');
       }
+      console.log('🔍 [AuthContext] 設置 loading 為 false');
       setLoading(false);
     };
 

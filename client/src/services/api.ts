@@ -26,12 +26,17 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
+    console.log('🔍 [API] 請求攔截器 - 請求 URL:', config.url);
+    console.log('🔍 [API] 請求攔截器 - Token 存在:', !!token);
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('🔍 [API] 請求攔截器 - 添加 Authorization 頭');
     }
     return config;
   },
   (error) => {
+    console.error('🔍 [API] 請求攔截器錯誤:', error);
     return Promise.reject(error);
   }
 );
@@ -65,8 +70,19 @@ export const authAPI = {
 
   // 獲取當前用戶信息
   getMe: async (): Promise<ApiResponse> => {
-    const response: AxiosResponse<ApiResponse> = await api.get('/auth/me');
-    return response.data;
+    console.log('🔍 [API] 調用 getMe API');
+    console.log('🔍 [API] 請求 URL:', '/auth/me');
+    console.log('🔍 [API] Base URL:', API_BASE_URL);
+    
+    try {
+      const response: AxiosResponse<ApiResponse> = await api.get('/auth/me');
+      console.log('🔍 [API] getMe 響應狀態:', response.status);
+      console.log('🔍 [API] getMe 響應數據:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('🔍 [API] getMe 請求失敗:', error);
+      throw error;
+    }
   },
 
   // 更新用戶信息
