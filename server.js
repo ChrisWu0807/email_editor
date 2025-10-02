@@ -14,7 +14,7 @@ const statisticsRoutes = require('./routes/statistics');
 const webhookRoutes = require('./routes/webhooks');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // 安全中間件
 app.use(helmet());
@@ -125,7 +125,7 @@ const startServer = async () => {
     // 初始化數據庫
     await initDatabase();
     
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 服務器運行在端口 ${PORT}`);
       console.log(`📧 Email Editor API 已啟動`);
       console.log(`🌍 環境: ${process.env.NODE_ENV || 'development'}`);
