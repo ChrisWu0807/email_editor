@@ -5,35 +5,27 @@
       "name": "email-editor-api",
       "source": {
         "type": "git",
-        "url": "https://github.com/your-username/email_editor.git",
+        "url": "https://github.com/ChrisWu0807/email_editor.git",
         "branch": "main",
-        "buildCommand": "npm install",
-        "startCommand": "npm run server"
+        "buildCommand": "npm install --omit=dev",
+        "startCommand": "node server.js"
       },
       "env": {
         "NODE_ENV": "production",
-        "PORT": "5000",
-        "CLIENT_URL": "https://your-client-app.zeabur.app"
-      },
-      "databases": [
-        {
-          "name": "postgres",
-          "type": "postgresql"
-        }
-      ]
+        "PORT": "5000"
+      }
     },
     {
       "name": "email-editor-client",
       "source": {
         "type": "git",
-        "url": "https://github.com/your-username/email_editor.git",
+        "url": "https://github.com/ChrisWu0807/email_editor.git",
         "branch": "main",
         "buildCommand": "cd client && npm install && npm run build",
-        "startCommand": "cd client && npx serve -s build -l 3000",
-        "buildContext": "client"
+        "startCommand": "cd client && npx serve -s build -l 3000"
       },
       "env": {
-        "REACT_APP_API_URL": "https://your-api-app.zeabur.app/api"
+        "REACT_APP_API_URL": "https://email-editor-api.zeabur.app/api"
       }
     }
   ]
