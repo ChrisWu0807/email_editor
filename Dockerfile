@@ -12,6 +12,8 @@ RUN npm install --omit=dev
 
 # 安裝前端依賴並構建
 WORKDIR /app/client
+RUN ls -la
+RUN cat package.json
 RUN npm install
 RUN npm run build
 WORKDIR /app
