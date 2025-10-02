@@ -91,10 +91,33 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404處理
-app.use('*', (req, res) => {
-  res.status(404).json({ error: '路由不存在' });
-});
+// 提供前端靜態文件（生產環境）
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  const clientBuildPath = path.join(__dirname, 'client', 'build');
+  
+  // 檢查 build 目錄是否存在
+  const fs = require('fs');
+  if (fs.existsSync(clientBuildPath)) {
+    // 提供靜態文件
+    app.use(express.static(clientBuildPath));
+    
+    // 所有非 API 路由都返回 index.html
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    });
+  } else {
+    // 如果沒有 build 目錄，返回 API 信息
+    app.use('*', (req, res) => {
+      res.status(404).json({ error: '路由不存在' });
+    });
+  }
+} else {
+  // 開發環境 - 404處理
+  app.use('*', (req, res) => {
+    res.status(404).json({ error: '路由不存在' });
+  });
+}
 
 // 啟動服務器
 const startServer = async () => {
