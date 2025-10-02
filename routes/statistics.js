@@ -131,6 +131,16 @@ router.get('/campaign/:id', async (req, res) => {
 // 獲取用戶所有活動的總體統計
 router.get('/overview', async (req, res) => {
   try {
+    console.log('🔍 [StatisticsAPI] /overview 端點被調用');
+    console.log('🔍 [StatisticsAPI] 請求用戶:', req.user);
+    console.log('🔍 [StatisticsAPI] 用戶 ID:', req.user?.id || req.user?.userId);
+    
+    const userId = req.user?.id || req.user?.userId;
+    if (!userId) {
+      console.log('🔍 [StatisticsAPI] 沒有用戶 ID');
+      return res.status(400).json({ success: false, error: '用戶 ID 不存在' });
+    }
+    
     const result = await query(
       `SELECT 
         COUNT(*) as total_campaigns,
@@ -139,7 +149,7 @@ router.get('/overview', async (req, res) => {
         COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed_campaigns
        FROM campaigns 
        WHERE user_id = $1`,
-      [req.user.id]
+      [userId]
     );
 
     const recipientStatsResult = await query(
@@ -153,7 +163,7 @@ router.get('/overview', async (req, res) => {
        FROM recipients r
        JOIN campaigns c ON r.campaign_id = c.id
        WHERE c.user_id = $1`,
-      [req.user.id]
+      [userId]
     );
 
     const campaignStats = result.rows[0];
