@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定義樣式 */
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 p-6;
+  }
+  
+  .form-input {
+    @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+}
+
+/* TinyMCE 編輯器樣式 */
+.tox .tox-edit-area__iframe {
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem !important;
+}
+
+.tox .tox-toolbar__primary {
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+}
