@@ -61,16 +61,7 @@ app.use('/api/campaigns', campaignRoutes);
 app.use('/api/statistics', statisticsRoutes);
 app.use('/api/webhooks', webhookRoutes);
 
-// 健康檢查端點 - Zeabur需要
-app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
-
-// API 信息路由（僅在開發環境或特定路徑）
+// API 信息路由（放在所有 API 路由之後）
 app.get('/api', (req, res) => {
   res.json({ 
     message: 'Email Editor API Server',
@@ -82,6 +73,15 @@ app.get('/api', (req, res) => {
       statistics: '/api/statistics',
       webhooks: '/api/webhooks'
     }
+  });
+});
+
+// 健康檢查端點 - Zeabur需要
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
