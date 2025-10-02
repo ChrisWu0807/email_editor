@@ -33,16 +33,22 @@ app.use('/api/', limiter);
 // CORS配置 - 支援本地開發和生產環境
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log('🔍 [CORS] 檢查來源:', origin);
+    
     // 允許本地開發和生產環境的請求
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://your-zeabur-app.zeabur.app',
+      'https://email-editor.zeabur.app',
       process.env.CLIENT_URL
     ].filter(Boolean);
     
+    console.log('🔍 [CORS] 允許的來源:', allowedOrigins);
+    
     if (!origin || allowedOrigins.includes(origin)) {
+      console.log('🔍 [CORS] 來源被允許');
       callback(null, true);
     } else {
+      console.log('🔍 [CORS] 來源被拒絕:', origin);
       callback(new Error('不允許的CORS來源'));
     }
   },

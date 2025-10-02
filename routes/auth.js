@@ -7,22 +7,30 @@ const { query } = require('../config/database');
 // 註冊
 router.post('/register', async (req, res) => {
   try {
+    console.log('🔍 [AuthAPI] /register 端點被調用');
+    console.log('🔍 [AuthAPI] 請求數據:', req.body);
+    
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
+      console.log('🔍 [AuthAPI] 缺少必填字段');
       return res.status(400).json({
         success: false,
         error: '用戶名、郵箱和密碼為必填項目'
       });
     }
 
+    console.log('🔍 [AuthAPI] 檢查用戶是否已存在');
     // 檢查用戶是否已存在
     const existingUser = await query(
       'SELECT id FROM users WHERE username = $1 OR email = $2',
       [username, email]
     );
 
+    console.log('🔍 [AuthAPI] 現有用戶查詢結果:', existingUser.rows);
+
     if (existingUser.rows.length > 0) {
+      console.log('🔍 [AuthAPI] 用戶已存在');
       return res.status(400).json({
         success: false,
         error: '用戶名或郵箱已存在'
